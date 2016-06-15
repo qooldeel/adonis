@@ -1,0 +1,10 @@
+#ifndef UTILITIES_4_CHEMICAL_MECHANISM_H
+#define UTILITIES_4_CHEMICAL_MECHANISM_H
+
+
+//no namespace here
+
+#define COUNT_DUPLICATE_REACTIONS
+
+
+#endif

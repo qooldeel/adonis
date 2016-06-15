@@ -1,0 +1,16 @@
+#Start data needed for activating the manifold stuff
+#data might be used from "MoRe_examples/H2_GRI/START/x_past.dat" or 
+# "MoRe_examples/H2_GRI/START/x_future.dat"
+#IMPORTANT: this is is a point near the equilibrium
+
+#taken from "x_future.dat"
+O:    2.6251246326197591e-01
+O2:   6.5486313935231344e-01
+H:    6.4567691455061160e-01
+OH:   1.2191871639949863e+00
+H2:   1.8597698416076471e+00
+HO2:  4.9125579930287683e-04
+H2O2: 3.9491219901950224e-05
+H2O:  1.1348000000000001e+01
+N2:   2.6584116000000002e+01
+T:    2.9123881624427045e+03

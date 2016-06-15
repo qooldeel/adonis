@@ -1,0 +1,18 @@
+#ifndef SPECIFY_A_PARABOLIC_INLET_VELOCITY_PROFILE_HH
+#define SPECIFY_A_PARABOLIC_INLET_VELOCITY_PROFILE_HH
+
+#include "../../common/globalfunctions.hh"
+#include "../../common/numericaltraits.hh"
+
+namespace Adonis{
+
+
+  template<class T1, class T2, class T3>
+  inline typename NumericalTypePromotion<T1,typename NumericalTypePromotion<T2,T3>::ReturnType>::ReturnType parabolic_inlet_velocity(const T1& r, const T2& R, const T3& v1max){
+    return v1max*(1. - r*r/(R*R));
+  }
+
+
+}  //end namespace 
+
+#endif

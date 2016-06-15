@@ -1,0 +1,574 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=latex 2015.4.26)  15 JUN 2016 20:39
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**InstallationGuideMarc
+(./InstallationGuideMarc.tex
+LaTeX2e <2014/05/01>
+Babel <3.9l> and hyphenation patterns for 15 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks14
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks15
+\ex@=\dimen103
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen104
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count87
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count88
+\leftroot@=\count89
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count90
+\DOTSCASE@=\count91
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count92
+\c@MaxMatrixCols=\count93
+\dotsspace@=\muskip10
+\c@parentequation=\count94
+\dspbrk@lvl=\count95
+\tag@help=\toks16
+\row@=\count96
+\column@=\count97
+\maxfields@=\count98
+\andhelp@=\toks17
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks18
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/epsfig.sty
+Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+\KV@toks@=\toks20
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: dvips.def on input line 91.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvips.def
+File: dvips.def 2014/04/23 v3.0j Driver-dependant file (DPC,SPQR)
+))
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
+)
+\epsfxsize=\dimen114
+\epsfysize=\dimen115
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2014/04/23 v1.1a Standard LaTeX Color (DPC)
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: dvips.def on input line 137.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 2014/04/23 v3.0j Driver-dependant file (DPC,SPQR)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count99
+\calc@Bcount=\count100
+\calc@Adimen=\dimen116
+\calc@Bdimen=\dimen117
+\calc@Askip=\skip46
+\calc@Bskip=\skip47
+LaTeX Info: Redefining \setlength on input line 75.
+LaTeX Info: Redefining \addtolength on input line 76.
+\calc@Ccount=\count101
+\calc@Cskip=\skip48
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks21
+\verbatim@line=\toks22
+\verbatim@in@stream=\read1
+)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/pifont.sty
+Package: pifont 2005/04/12 PSNFSS-v9.2a Pi font support (SPQR) 
+LaTeX Font Info:    Try loading font information for U+pzd on input line 63.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/upzd.fd
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+LaTeX Font Info:    Try loading font information for U+psy on input line 64.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/upsy.fd
+File: upsy.fd 2001/06/04 font definitions for U/psy.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/wasysym/wasysym.sty
+Package: wasysym 2003/10/30 v2.0 Wasy-2 symbol support package
+\symwasy=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `wasy' in version `bold'
+(Font)                  U/wasy/m/n --> U/wasy/b/n on input line 90.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2014/10/28 v1.8i multicolumn formatting (FMi)
+\c@tracingmulticols=\count102
+\mult@box=\box28
+\multicol@leftmargin=\dimen118
+\c@unbalance=\count103
+\c@collectmore=\count104
+\doublecol@number=\count105
+\multicoltolerance=\count106
+\multicolpretolerance=\count107
+\full@width=\dimen119
+\page@free=\dimen120
+\premulticols=\dimen121
+\postmulticols=\dimen122
+\multicolsep=\skip49
+\multicolbaselineskip=\skip50
+\partial@page=\box29
+\last@line=\box30
+\maxbalancingoverflow=\dimen123
+\mult@rightbox=\box31
+\mult@grightbox=\box32
+\mult@gfirstbox=\box33
+\mult@firstbox=\box34
+\@tempa=\box35
+\@tempa=\box36
+\@tempa=\box37
+\@tempa=\box38
+\@tempa=\box39
+\@tempa=\box40
+\@tempa=\box41
+\@tempa=\box42
+\@tempa=\box43
+\@tempa=\box44
+\@tempa=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\@tempa=\box50
+\@tempa=\box51
+\c@columnbadness=\count108
+\c@finalcolumnbadness=\count109
+\last@try=\dimen124
+\multicolovershoot=\dimen125
+\multicolundershoot=\dimen126
+\mult@nat@firstbox=\box52
+\colbreak@box=\box53
+\mc@col@check@num=\count110
+)
+(/usr/share/texlive/texmf-dist/tex/latex/marvosym/marvosym.sty
+Package: marvosym 2011/07/20 v2.2 Martin Vogel's Symbols font definitions
+)
+(./InstallationGuideMarc.aux)
+\openout1 = `InstallationGuideMarc.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Try loading font information for U+msa on input line 49.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 49.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+wasy on input line 49.
+
+(/usr/share/texlive/texmf-dist/tex/latex/wasysym/uwasy.fd
+File: uwasy.fd 2003/10/30 v2.0 Wasy-2 symbol font definitions
+)
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 55.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 55.
+File: debiancurl.eps Graphic file (type eps)
+ <debiancurl.eps>
+File: gnu.eps Graphic file (type eps)
+
+<gnu.eps>
+\c@local1=\count111
+LaTeX Font Info:    Try loading font information for U+mvs on input line 96.
+ (/usr/share/texlive/texmf-dist/tex/latex/marvosym/umvs.fd) [1
+
+]
+No file simplelapack.cc.
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 138
+.
+LaTeX Font Info:    No file OMScmtt.fd. on input line 138.
+
+LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbraceleft' on input line 138.
+
+Missing character: There is no â in font cmtt10!
+Missing character: There is no € in font cmtt10!
+Missing character: There is no ˜ in font cmtt10!
+
+Underfull \hbox (badness 1681) in paragraph at lines 138--138
+[][][]\OT1/cmr/m/n/10 Otherwise an er-ror oc-curs, like "\OT1/cmtt/m/n/10 error
+: ...dgtsv[] was not declared in this scope\OT1/cmr/m/n/10 " or
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 138--138
+\OT1/cmr/m/n/10 "\OT1/cmtt/m/n/10 ...(.text+0x9a): undefined reference to `dgts
+v[](long const*, long const*, double*,
+ []
+
+[2]
+File: diplodocus.ps Graphic file (type eps)
+ <diplodocus.ps>
+\c@local=\count112
+ [3]
+Overfull \hbox (6.8304pt too wide) in paragraph at lines 204--210
+\OT1/cmtt/m/n/12 ../configure; make; make test; make install \OT1/cmr/m/n/12 an
+d the in-stal-la-tion can be found
+ []
+
+
+Overfull \hbox (21.33875pt too wide) in paragraph at lines 211--217
+ [] 
+ []
+
+[4]
+Overfull \hbox (24.16483pt too wide) in paragraph at lines 239--239
+ \OT1/cmtt/m/n/12 LD[]LIBRARY[]PATH=$LD[]LIBRARY[]PATH:/home/mfein/SOFTWARE/Coi
+nIpopt/build/lib/ 
+ []
+
+File: diplodocus.ps Graphic file (type eps)
+<diplodocus.ps>
+\c@loc1=\count113
+ [5] [6]
+Overfull \hbox (0.55621pt too wide) in paragraph at lines 316--321
+\OT1/cmr/m/n/12 Check \OT1/cmtt/m/n/12 http://www.coin-or.org/CppAD/Doc/get[]st
+arted.cpp.htm \OT1/cmr/m/n/12 for fur-ther de-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 327--327
+[][]\OT1/cmtt/m/n/10 user@linux:~/SOFTWARE/CppAD/cppad-\OT1/cmtt/m/it/10 versio
+n\OT1/cmtt/m/n/10 /introduction/get[]started$ is abbreviated
+ []
+
+
+Overfull \hbox (19.60974pt too wide) in paragraph at lines 322--330
+ [] 
+ []
+
+
+Overfull \hbox (8.6693pt too wide) in paragraph at lines 335--340
+ [] 
+ []
+
+File: diplodocus.ps Graphic file (type eps)
+<diplodocus.ps> [7]
+File: diplodocus.ps Graphic file (type eps)
+ <diplodocus.ps> [8]
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 406.
+ [9]
+Underfull \hbox (badness 10000) in paragraph at lines 441--443
+
+ []
+
+\c@loc2=\count114
+
+Overfull \hbox (36.51483pt too wide) in paragraph at lines 450--451
+ \OT1/cmtt/m/n/12 http://www.paraview.org/Wiki/ParaView:Build[]And[]Install#On[
+]Unix-like[]systems 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 452--453
+
+ []
+
+[10]
+Overfull \hbox (37.96783pt too wide) in paragraph at lines 511--513
+[]\U/mvs/m/n/12 !\OT1/cmr/m/n/12 Don't for-get to set the en-vi-ron-ment vari-a
+ble for qmake in the file \OT1/cmr/m/sl/12 $\OT1/cmr/m/it/12 HOME/.profile
+ []
+
+
+Overfull \hbox (23.32771pt too wide) in paragraph at lines 529--530
+ \OT1/cmtt/m/n/12 http://www.mcs.anl.gov/research/projects/mpi/mpich1/download.
+html 
+ []
+
+[11]
+Overfull \hbox (12.41692pt too wide) in paragraph at lines 575--578
+\OT1/cmr/m/n/12 word later on: \OT1/cmtt/m/n/12 ssh targethost mkdir -p .ssh <e
+nter targethost's
+ []
+
+
+Overfull \hbox (46.01945pt too wide) in paragraph at lines 579--580
+[]\OT1/cmtt/m/n/12 cat .ssh/id[]rsa.pub | ssh targethost 'cat >> .ssh/authorize
+d[]keys' 
+ []
+
+
+Overfull \hbox (44.10841pt too wide) in paragraph at lines 598--600
+[]\OT1/cmtt/m/n/12 make install \OT1/cmr/m/n/12 (to unin-stall, run the script 
+\OT1/cmr/m/it/12 /usr/local/mpi-1.2.7/sbin/mpiuninstall\OT1/cmr/m/n/12 ) 
+ []
+
+
+Overfull \hbox (62.24463pt too wide) in paragraph at lines 603--609
+ [] 
+ []
+
+[12]
+Overfull \hbox (25.70552pt too wide) in paragraph at lines 630--638
+ [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 639--646
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 639--646
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 665--669
+
+ []
+
+
+Overfull \hbox (30.08664pt too wide) in paragraph at lines 665--669
+\OT1/cmr/bx/n/12 MPI us-age: \OT1/cmr/m/n/12 you can copy and al-ter the Make-f
+ile in \OT1/cmr/m/it/12 /usr/local/mpich-1.2.7/examples
+ []
+
+[13]
+Overfull \hbox (39.77995pt too wide) in paragraph at lines 701--703
+[]\U/mvs/m/n/12 !$[]$ 
+ []
+
+
+Overfull \hbox (11.76501pt too wide) in paragraph at lines 717--719
+[]\OT1/cmr/m/n/12 Suppose op-tion 'g' has been cre-ated, press 'g' and if, hope
+-fully, no ER-ROR/WARNING
+ []
+
+[14]
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 794.
+
+Overfull \hbox (57.87817pt too wide) in paragraph at lines 801--803
+[]\OT1/cmr/m/n/12 Download sources from \OT1/cmtt/m/n/12 http://www.mathematik.
+uni-freiburg.de/IAM/Research/alugrid/ 
+ []
+
+[15]
+
+LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
+(Font)              using `OT1/cmss/bx/n' instead on input line 818.
+
+
+Overfull \hbox (37.30531pt too wide) in paragraph at lines 830--841
+ [] 
+ []
+
+[16]
+File: alugridconfig.txt  (verbatim)
+
+Overfull \hbox (37.25584pt too wide) in paragraph at lines 856--858
+\OT1/cmtt/m/n/12 http://www.mathematik.uni-freiburg.de/IAM/homepages/claus/down
+load/alberta/ 
+ []
+
+[17]
+File: marcopengl.txt  (verbatim)
+
+Overfull \hbox (10.9777pt too wide) in paragraph at lines 877--877
+ []\OT1/cmtt/m/n/12 # Required-Start:    $local_fs $remote_fs $network $named $
+time[] 
+ []
+
+
+Overfull \hbox (10.9777pt too wide) in paragraph at lines 877--877
+ []\OT1/cmtt/m/n/12 # Required-Stop:     $local_fs $remote_fs $network $named $
+time[] 
+ []
+
+
+Overfull \hbox (4.8027pt too wide) in paragraph at lines 877--877
+ []\OT1/cmtt/m/n/12 # Description:       By defining a softlink you should be a
+ble[] 
+ []
+
+[18] [19]
+Overfull \hbox (10.47684pt too wide) in paragraph at lines 935--939
+ [] 
+ []
+
+File: parallel-debug.opts  (verbatim)
+
+Overfull \hbox (6.38083pt too wide) in paragraph at lines 943--943
+ []\OT1/cmtt/m/n/12 #Configuration flags are written to '.opts' file 'parallel-
+debug.opts'[] 
+ []
+
+
+Overfull \hbox (12.55583pt too wide) in paragraph at lines 943--943
+ []\OT1/cmtt/m/n/12 CONFIGURE_FLAGS="--prefix=/home/mfein/ARRAKIS --disable-doc
+umentation \[] 
+ []
+
+
+Overfull \hbox (31.08084pt too wide) in paragraph at lines 943--943
+ []\OT1/cmtt/m/n/12 --disable-mpiruntest --enable-parallel --with-alugrid=/usr/
+local/alugrid \[] 
+ []
+
+
+Overfull \hbox (18.73083pt too wide) in paragraph at lines 943--943
+ []\OT1/cmtt/m/n/12 CXXFLAGS=\"-O0 -g -Wall -03 -finline-functions -funroll-loo
+ps -DNDEBUG\"[] 
+ []
+
+File: parallel_and_GRAPE.opts  (verbatim)
+[20]
+Overfull \hbox (36.15942pt too wide) in paragraph at lines 955--960
+\OT1/cmr/m/n/12 chose \OT1/cmr/m/sl/12 $\OT1/cmr/m/it/12 HOME/ARRAKIS \OT1/cmr/
+m/n/12 for in-stal-la-tion whereas the \OT1/cmr/m/it/12 *tar.gz \OT1/cmr/m/n/12
+ files are in \OT1/cmr/m/sl/12 $\OT1/cmr/m/it/12 HOME/DUNE\OT1/cmr/m/n/12 )!![]
+ 
+ []
+
+File: dunefound.txt  (verbatim)
+
+Overfull \hbox (24.90584pt too wide) in paragraph at lines 960--960
+ []\OT1/cmtt/m/n/12 dune-common......: yes (/home/mfein/DUNE/dune-common-1.2.1)
+ version 1.2.1[] 
+ []
+
+
+Overfull \hbox (14.56476pt too wide) in paragraph at lines 961--962
+[]\OT1/cmr/m/n/12 NOTE: you should have in-stalled 'au-tomake' and 'au-to-con-f
+ig' via \OT1/cmtt/m/n/12 # aptitude install
+ []
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/bx/sc' undefined
+(Font)              using `OT1/cmss/bx/n' instead on input line 975.
+
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 999--1001
+
+ []
+
+[22]
+File: errmessmpi.txt  (verbatim)
+ [23]
+Underfull \hbox (badness 10000) in paragraph at lines 1110--1110
+
+ []
+
+No file outputparallel.txt.
+
+LaTeX Font Warning: Font shape `U/wasy/bx/n' in size <10.95> not available
+(Font)              Font shape `U/wasy/b/n' tried instead on input line 1116.
+
+File: diplodocus.ps Graphic file (type eps)
+<diplodocus.ps> [24]
+File: diplodocus.ps Graphic file (type eps)
+ <diplodocus.ps> [25] (./InstallationGuideMarc.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 2524 strings out of 494528
+ 30396 string characters out of 6171196
+ 82912 words of memory out of 5000000
+ 5822 multiletter control sequences out of 15000+600000
+ 27036 words of font info for 104 fonts, out of 8000000 for 9000
+ 264 hyphenation exceptions out of 8191
+ 32i,14n,24p,946b,444s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on InstallationGuideMarc.dvi (25 pages, 73896 bytes).

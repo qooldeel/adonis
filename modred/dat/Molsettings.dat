@@ -1,0 +1,17 @@
+## MOL SETTINGS for H2C6 1D MOL discretization
+##
+
+
+nthstep: 20  ## Print every nth time step. If nthstep = 0 then use the next to vars
+
+savestep: 1
+saveinterval: 0.01
+
+##1D
+a: 0.
+b: 0.01
+
+Nx: 51
+
+
+

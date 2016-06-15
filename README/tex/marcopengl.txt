@@ -1,0 +1,17 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          marcopengl
+# Required-Start:    $local_fs $remote_fs $network $named $time
+# Required-Stop:     $local_fs $remote_fs $network $named $time
+# Default-Start:     2 3 4 5
+# Default-Stop:      
+# Short-Description: Set softlink to openGL
+# Description:       By defining a softlink you should be able 
+#                    to properly use -lGL     
+### END INIT INFO
+
+echo -n "Creating LibGL softlink for proper usage of -lGL..."
+ln -s /usr/lib/libGL.so.1 /usr/lib/libGL.so
+echo "Done :-)"
+exit 0       

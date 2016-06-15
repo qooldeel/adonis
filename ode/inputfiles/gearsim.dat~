@@ -1,0 +1,44 @@
+##
+## Gear's projection to a slow manifold
+##
+
+tend:   7.e-01        #7.e-02
+integrationStep:  1.25e-05
+innerstep: 1.e-07 # 1.e-04  #1.e-07  #1.25e-05
+
+m:    9        #9            ### m-order close to SIM
+max:  300000
+TOL:  1.e-08     #1.e-06          ### leave p-loop is tolerance is met
+
+#Newton iteration
+maxNewt:  5
+newtTol:  1.e-10 
+
+
+##GNUplot
+inTeX:      false #true
+width:      8.5    # size of Latex pic
+height:     7.0
+unit:       cm     # size specifier
+outfilename:h2c6Gear_finerTol_valsClose2Eq 
+pointival: 1200
+
+## compute mass balance directly (true (yes) or false (no)
+directMass: false
+
+#####     Starting values for species reconstruction
+###H2C6Mech -- Jochen's values, always use 'x_past.dat'
+H2:  3.0004541410314495e-01   
+H:   1.8944296646551151e-01      
+O2:  1.4354979042038563e-01  
+O:   1.0238618155887168e-01       
+H2O: 5.9995196772784154e-01     
+OH:  1.0562269872515486e-02   
+
+
+# H2:  0.4549999999992859
+# H:   0.7780585738931507     
+# O2:  0.2366143850825262     
+# O:   0.3628298037265891    
+# H2O: 0.1479999999999196    
+# OH:  0.01594142610843904

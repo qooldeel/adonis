@@ -1,0 +1,13 @@
+ALUGrid is ready to compile for parallel computations!
+
+The following components where found:
+------------------------------------
+
+METIS............: yes (Version 4.0)
+PARTY............: no
+MPI..............: yes
+
+------------------------------------
+
+See ./configure --help and config.log for reasons 
+why a component wasn't found

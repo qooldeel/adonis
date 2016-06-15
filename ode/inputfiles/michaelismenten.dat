@@ -1,0 +1,55 @@
+##
+## DIMENSIONLESS MICHAELIS-MENTEN SYSTEM [1, p. 23]
+##
+## Ref.:
+## R. E. O'Malley: "Singular Perturbation Methods for ODEs", Springer, 1991
+##
+
+tend: 10
+
+MAX: 5000   Number of time iterations
+
+#SIM approx
+vattract: 0.        #take near fixed point (system fixed point: (0,0) )
+simtol: 1.e-10
+pmax: 1000
+m: 4
+n: 1    # optional
+
+y1_0: 1
+y2_0: 0
+
+step: 1.e-02
+
+maxNewt:  5
+breakTOL: 1.e-10
+
+#parameters of ODE model
+
+kappa:    1
+lambda:   0.5
+epsilon:  1.e-01
+
+stradd: _2 
+
+##########################################################
+##          plotting setting for GNUplot                ##
+##########################################################
+
+inTeX: true  # print in epslatex
+width:  8.5    # size of Latex pic
+height: 7.0
+unit:   cm     # size specifier
+
+enforcerange: true   # false= no range, true: range specifications as follows
+xrangeStart_1: 0
+xrangeEnd_1:   8  #0.13
+yrangeStart_1: 0   #0.98
+yrangeEnd_1:   1  #1.005
+
+xrangeStart_2: 0.5   #0.97
+xrangeEnd_2:   1  #1.005
+yrangeStart_2: 0  #0.55
+yrangeEnd_2:   1   #1.05
+
+

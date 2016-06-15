@@ -1,0 +1,9 @@
+DUNE Version 2.0
+
+REPLACE all occurances of e.g.
+
+ <dune/common/static_assert.hh>
+
+by 
+   
+   "static_assert.hh"

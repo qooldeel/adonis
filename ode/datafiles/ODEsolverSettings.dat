@@ -1,0 +1,42 @@
+#
+#
+# Parameters for ODE solvers
+#
+# PRINT PRECISION
+printprec: 12
+
+# TIME HORIZON
+t0: 0.
+tend:  6.e-05 #5.e-04   #3.e-05   #3.e-06        #1.8e-04
+
+# TEMPERATURE   -- when non-isothermal mechs are considered
+T0: 1000.  #3000 #1500   #1400  #o.k.: 1500, 3000   
+
+# GRAPHICS
+toeps: false
+lw: 3
+
+############################
+###### SOLVER SETTINGS #####
+############################
+
+## 1.) IMPLICIT EULER
+
+maxsteps: 2000000
+maxNewt:  5
+ntol:     1.e-08
+atol:     1.e-08
+hEstim:   1.e-06   
+Cscal:    1.
+hmin:     1.5e-07  
+hmax:     4.14e-03
+  
+fname: O3_FDM_2D_
+
+
+######################################################
+## 2.) RKF45
+Msteps: 500000
+hEst:   1.45e-04
+TOL:    1.e-05
+

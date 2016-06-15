@@ -1,0 +1,50 @@
+## Parameters for the Ren Pope model; taken from [1]
+##
+## [1] Z. Ren, S. B. Pope, "The use of slow manifolds in reactive flows",
+##     Combust. Flame 147, 2006
+
+a:    1.
+b:    1.
+c:    1.
+d:    1.
+e:    0.             #used for diffusion: D2 = D1 +e*x
+eps:  0.01
+D1:   1.             #first diffusion coefficient
+
+
+
+tend: 1
+
+### plot the stuff for REN POPE 
+#transform to latex file
+TeXme:   true
+
+TeXfile: RP_DS_stiffgrade4
+
+addstr: attractor  #analytical SIM
+
+xlab: u_1
+ylab: u_2
+maintitle: phase space
+
+plotunit: cm
+width:    8.5  #6.075
+height:   7  #5   
+
+#inital values
+z1_0: 2.75 #0.5
+z2_0: 1.75  #1.75
+
+# number of ivs
+niv: 17
+
+#increment size
+incr: 0.075
+
+#xrange
+
+xfrom: 0
+xto:   3.9
+
+yfrom: 0
+yto:   1.2

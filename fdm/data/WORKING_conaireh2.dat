@@ -1,0 +1,121 @@
+############################################################################
+############   SETTING FOR 1D and 2D FINITE DIFFERENCE METHOD   ############
+############################################################################
+##NOTE: Do NOT change names of variables (strings preceding the colon)
+##
+##  only use SI units 
+##
+############################################################################
+
+
+nthstep: 10   #10  # print every 'nthestep' step
+
+# Domain: Rectangle: [a,b] x [c,d]
+# When 1D is considered, only [a,b] becomes meaningful
+a: 0.
+b: 0.005  #0.004  #0.005 
+c: 0.
+d: 0.001 
+
+# Number of grid points in x-direction, number of grid points in y-direction
+# higher grid numbers may result in a leak 
+Nx: 59  #59 #53 #49   ## 59
+Ny: 25 #17 #23   ## 17 no: #19 #21 no:  #23 
+
+
+## define when a value is approx. zero
+near_zero: 1.e-12
+
+## BOUNDARY RELEVANT DATA
+
+channel_length_frac: 20.
+plateau_width: 4                #meaning: 4*hx (here I assume equidist. spacing)
+
+hottest_y: 0.0005
+
+
+T_ignition:   960  #1800
+T_min:        300.         
+T_wall:       300.
+
+burner_length: 0.00025
+
+pconst: 101325     # atmospheric pressure
+
+#inlet speed
+v1_in: 0.75  #0.6
+v2_in: 0.
+
+# use mechanical compression
+mechCompress: true
+
+# use gravitational force
+gravForce: true
+
+#gravitational acceleration vector
+g1: 9.80665   
+g2: 0
+
+
+
+#############################
+#############################
+##         ODE             ##
+#############################
+#############################
+
+t0:   0.
+tend: 5.83e-03  
+
+
+
+#IV Mixture, fuel-air-ratio: 1:15.87
+O:     0.
+O2:    0.3553 #0.4483
+H:     0.
+OH:    0.
+H2:    0.0224 #0.0282
+HO2:   0.	  
+H2O2:  0.
+H2O:   0.     
+N2:    0.6223   #0.5235
+AR:    0.
+
+
+#############################
+## IMPLICIT EULER SETTINGS ##
+#############################
+
+maxsteps: 2000000
+maxNewt:  5
+ntol:     1.e-06  #1.e-08
+atol:     1.e-06  #1.e-08
+
+hEstim:   1.e-08 #1.e-07 #5e-08 #2D O3: 0.0000125 #1.e-06   #1.e-08    # 2.5e-08  #0.0000045
+hmin:     1.e-11 #2D O3: 5e-06 #1.5e-06  #1.e-08     #1.e-10   #1.5e-9
+hmax:     0.1    #4.14e-03  
+
+### increase Cscal, e.g. Cscal >= 1 should yield sufficient decrease
+Cscal:    1. #1.111
+
+
+
+printprec: 14 
+
+filename: CONAIRE_H2_2D_FULL
+
+
+
+
+#######################
+#### REDUCTION ########
+#######################
+
+newtTol: 1.e-08
+whichSolver: E
+
+maxit: 12
+nmtol: 1.e-09
+Tol: 1.e-09
+
+filename_RED: REDUCED_CONAIRE_H2_2D

@@ -1,0 +1,7 @@
+##
+## Stepsize to integrate z' = S(z) for speciesreconstruction
+##
+
+##good choice for ODE case: 1.25e-04
+Delta_t_inner: 0.0015    #1.e-03 #1.e-12   #1.25e-04 #1.e-13 #1.25e-5 #1.e-8 
+

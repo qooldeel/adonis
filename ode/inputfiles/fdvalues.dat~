@@ -1,0 +1,6 @@
+x1: 0.7
+x2: 0.6
+
+tol: 1.e-11
+
+whatderivative: 0   # 0 = AD, 1 = forward FD, 2 = central FD

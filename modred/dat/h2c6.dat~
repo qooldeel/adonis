@@ -1,0 +1,62 @@
+###################
+## GENERAL ########
+###################
+
+nthstep: 10
+
+a: 0
+b: 0.01
+
+Nx: 51
+
+p0: 101325.
+rho: 1.        
+temperature: 1000.
+
+# time horizon
+t0:   0
+tend: 1 #2
+
+
+filenamefull: H2C6_FULL
+filenameredu: H2C6_RED_1st
+
+kn:   0.0015  #0.0005  #0.000025  ## also used in reduction
+
+hmin: 1.e-07
+hmax: 1.e-01;
+
+####################
+### REDUCTION ######
+####################
+#inner_kn: 0.0015
+
+whichTimestepper: I
+
+
+## zM0 -- Xpast?
+
+H2:  0.2    #3.0004541410314495e-01
+H:   0.95   #1.8944296646551151e-01
+O2:  0.31   #1.4354979042038563e-01
+O:   0.03   #1.0238618155887168e-01
+H2O: 0.3    #5.9995196772784154e-01
+OH:  0.05   #1.0562269872515486e-02
+
+#maxNewt: 5
+
+maxIt:   10             #enforce mass balance; max. no of iterations
+tol:     1.e-08         #enforce mass balance; break loop for that tol
+
+nmtol:   1.e-09         #test if point satisfies C·zM = b
+
+
+newtTol: 1.e-07         #for integration step
+
+
+
+### DEPRECATED
+### ONLY DUMMIES NOW
+# Print settings
+savestep: 1
+saveinterval: 1.e-09 #0.00001  	

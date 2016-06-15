@@ -1,0 +1,422 @@
+#ifndef CONVECTION_REACTION_DIFFUSION_TAKEN_FROM_SCHIESSER_HH
+#define CONVECTION_REACTION_DIFFUSION_TAKEN_FROM_SCHIESSER_HH
+
+#include "../../../common/error.hh"
+#include "../../../common/smartassign.hh"
+#include "../../../common/typeadapter.hh"
+#include "../../../expressiontemplates/exprvec.hh"
+#include "../../../containers/staticarray.hh"
+#include "../../../misc/misctmps.hh"
+#include "../../../io/readinparameters.hh"
+#include "../../functorid.hh"
+
+namespace Adonis{
+
+ 
+  /**
+   * Taken from [SCHIESSER and GRIFFITHS, "A Compendium of PDEs Models - Method of Lines Analysis with Matlab", chap. 13]
+   * This is a good example of a simultaneous, nonlinear, 2D PDE system in 2 variables (concentration of a species and temperature) stated in cylindrical coordinates
+   * Losely follows the Matlab code from 'pde_1.m'
+   */
+  template<class T>
+  class CDRCylindrical2DSchiesser{
+  public:
+    typedef T value_type;
+    typedef ExprTmpl::MyVec<T> VType;
+    typedef typename TypeAdapter<T>::BaseType BaseType;
+
+    //typedef MOLFunctorIdentifier<2,FunctorID::cylindricalCDRSchiesser> mol_type;
+
+    CDRCylindrical2DSchiesser(int n = 0):rhs_(n),u_(n){
+      ParameterData PM;
+      //! use absolute path here!
+      PM.read_from_file("/home/mfein/MARC++/ode/datafiles/cylindrical_CDR.dat");
+      nz_ = PM.get_datum<int>("Nx");  //x-axis
+      nr_ = PM.get_datum<int>("Ny");  //y-axis
+      dz_ = (PM.get_datum<BaseType>("b")-PM.get_datum<BaseType>("a"))/(nz_-1);
+      //! Schiesser only devides by nz_ here
+      dr_ = (PM.get_datum<BaseType>("d")-PM.get_datum<BaseType>("c"))/(nr_-1);
+      //!include bdy point as well
+      drs_ = ntimes<2>(dr_);
+      std::cout << "nz = "<<nz_<<",  nr = "<< nr_ << ",  dz = "<< dz_ << ",  dr = = "<< dr_ << ",  drs = "<<drs_ << std::endl;
+      r_ = z_ = 0.;
+      h_ = PM.get_datum<BaseType>("h");
+      k_ =  PM.get_datum<BaseType>("k");
+      Tw_ = PM.get_datum<BaseType>("Tw");
+      Tkf_ = 0.;
+      cae_ = PM.get_datum<BaseType>("cae");
+      Tke_ = PM.get_datum<BaseType>("Tke");
+      rk0_ = PM.get_datum<BaseType>("rk0");
+      E_ = PM.get_datum<BaseType>("E");
+      R_ = PM.get_datum<BaseType>("R");
+      rk_ = 0.;
+      Dc_ = PM.get_datum<BaseType>("Dc");
+      v_ = PM.get_datum<BaseType>("v");
+      Dt_ = PM.get_datum<BaseType>("Dt");
+      dH_ = PM.get_datum<BaseType>("dH");
+      rho_ = PM.get_datum<BaseType>("rho");
+      Cp_ = PM.get_datum<BaseType>("Cp");
+      
+      int npt = nz_*nr_;
+      //only in size of a slide
+      car_.resize(npt);
+      carr_.resize(npt);
+      Tkr_.resize(npt);
+      Tkrr_.resize(npt);
+ 
+      caz_.resize(npt);
+      Tkz_.resize(npt);
+    }
+
+    std::size_t dim() const {return rhs_.size();}
+    std::size_t domain_dim() const {return rhs_.size();}
+
+    //! this follows closely the implementation of Schiesser. Note however that
+    //! it takes much more time since a lot of additional vectors are used
+    //! for better representation
+    template<class X>
+    VType& operator()(const X& U){
+      
+      for(int i = 0; i < nz_; ++i){
+	z_ = i*dz_;
+	for(int j = 0; j < nr_; ++j){
+	  r_ = j*dr_;
+
+	  if(!is_well_defined_value(U[OFF(i,j,CONC)]) || !is_well_defined_value(U[OFF(i,j,TEMP)])){
+	    ADONIS_ERROR(ValueError,"c("<<i<<", "<<j<<") = "<<U[OFF(i,j,CONC)] << ",  T("<<i<<", "<<j<<") = "<<U[OFF(i,j,TEMP)]<<".");
+	  }
+	    
+	  //boundary
+	  //(1/r)*car, (1/r)*Tkr
+	  if(j == 0){
+	    car_[OFF(i,j)]=2.0*(U[OFF(i,j+1,CONC)]-U[OFF(i,j,CONC)])/drs_;
+	    Tkr_[OFF(i,j)]=2.0*(U[OFF(i,j+1,TEMP)]-U[OFF(i,j,TEMP)])/drs_;
+	  }
+	  else if (j == nr_-1){
+	    car_[OFF(i,j)]=0.0;
+	    Tkr_[OFF(i,j)]=(1.0/r_)*(h_/k_)*(Tw_-U[OFF(i,j,TEMP)]);
+	  }
+	  else{
+	    car_[OFF(i,j)]=(1.0/r_)*(U[OFF(i,j+1,CONC)]-U[OFF(i,j-1,CONC)])/(2.0*dr_);
+	    Tkr_[OFF(i,j)]=(1.0/r_)*(U[OFF(i,j+1,TEMP)]-U[OFF(i,j-1,TEMP)])/(2.0*dr_);  
+	  }
+
+	  //carr, Tkrr
+	  if(j == 0){
+	    carr_[OFF(i,j)]=2.0*(U[OFF(i,j+1,CONC)]-U[OFF(i,j,CONC)])/drs_;
+	    Tkrr_[OFF(i,j)]=2.0*(U[OFF(i,j+1,TEMP)]-U[OFF(i,j,TEMP)])/drs_; 
+	  }
+	  else if (j == nr_-1){
+	    carr_[OFF(i,j)]=2.0*(U[OFF(i,j-1,CONC)]-U[OFF(i,j,CONC)])/drs_;
+	    Tkf_=U[OFF(i,j-1,TEMP)]+2.0*dr_*h_/k_*(Tw_-U[OFF(i,j,TEMP)]);
+	    Tkrr_[OFF(i,j)]=(Tkf_-2.0*U[OFF(i,j,TEMP)]+U[OFF(i,j-1,TEMP)])/drs_;
+	  }
+	  else{
+	    carr_[OFF(i,j)]=(U[OFF(i,j+1,CONC)]-2.0*U[OFF(i,j,CONC)]+U[OFF(i,j-1,CONC)])/drs_;
+	      Tkrr_[OFF(i,j)]=(U[OFF(i,j+1,TEMP)]-2.0*U[OFF(i,j,TEMP)]+U[OFF(i,j-1,TEMP)])/drs_;
+	  }
+
+	  //caz, Tkz
+	  if(i == 0){
+	    caz_[OFF(i,j)]=(U[OFF(i,j,CONC)]-cae_)/dz_;
+	    Tkz_[OFF(i,j)]=(U[OFF(i,j,TEMP)]-Tke_)/dz_;
+	  }
+	  else{
+	    caz_[OFF(i,j)]=(U[OFF(i,j,CONC)]-U[OFF(i-1,j,CONC)])/dz_;
+	    Tkz_[OFF(i,j)]=(U[OFF(i,j,TEMP)]-U[OFF(i-1,j,TEMP)])/dz_;
+	  }
+
+	  //PDEs
+	  rk_=rk0_*exp(-E_/(R_*U[OFF(i,j,TEMP)]))*ntimes<2>(U[OFF(i,j,CONC)]);
+	  rhs_[OFF(i,j,CONC)]=Dc_*(carr_[OFF(i,j)]+car_[OFF(i,j)])-v_*caz_[OFF(i,j)]-rk_;
+	  adonis_assert(is_well_defined_value(rhs_[OFF(i,j,CONC)]));
+	  rhs_[OFF(i,j,TEMP)]=Dt_*(Tkrr_[OFF(i,j)]+Tkr_[OFF(i,j)])-v_*Tkz_[OFF(i,j)]-dH_/(rho_*Cp_)*rk_;
+	  adonis_assert(is_well_defined_value(rhs_[OFF(i,j,TEMP)]));		
+	} // end j
+      }  //end i
+	
+	
+      return rhs_;
+    }
+
+    //dummy function
+    template<class ITER>
+    void get_y_prev(ITER it, const T& s){}
+ 
+  private:
+	
+	enum{CONC = 0,TEMP = 1};
+
+    //!  this is row-oriented unlike the orignial, which is Matlab-column
+    //! oriented
+    int OFF(int i, int j, int quant){
+      //adonis_assert((i >= 0) && (i < nz_) && (j >= 0) && (j < nr_) && (quant >= 0) && (quant >= 0) && (quant < 2));
+      if((i < 0) || (i >= nz_) || (j < 0) || (j >= nr_) || (quant < 0) || (quant >= 2)){
+	ADONIS_ERROR(IndexError, "Index out of range: i = "<<i<<", j = "<<j<<", quant = "<<quant<<".");
+      }
+      return (i + nz_*j + quant*nr_*nz_);
+    }
+
+    //! only for slide containing nr_*nz_ points
+    int OFF(int i, int j){
+      //adonis_assert((i >= 0) && (i < nz_) && (j >= 0) && (j < nr_));
+      if((i < 0) || (i >= nz_) || (j < 0) || (j >= nr_)){
+	ADONIS_ERROR(IndexError, "Index out of range: i = "<<i<<", j = "<<j<<".");
+      }
+      return (i + nz_*j);
+    }
+
+    VType rhs_, u_, car_, carr_, Tkr_, Tkrr_, caz_, Tkz_;
+    int nz_, nr_;
+    T dr_, dz_, drs_, r_, z_, h_, k_, Tw_, Tkf_, cae_, Tke_ ,rk0_, E_, R_, rk_,
+      Dc_, v_, Dt_, dH_, rho_, Cp_;
+   
+  };
+
+
+  //========================================================================
+  /**
+   * \brief My interpretation of the interpretation
+   *
+   * NOTE: my not be work as usual (i.e. providing explicit values for u)
+   *       because there needs to be modeled a singularity on lower bdy...
+   */
+  //========================================================================
+  template<class T>
+  class MarcCDRCylindrical2D{
+  public:
+    typedef T value_type;
+    typedef ExprTmpl::MyVec<T> VType;
+    typedef typename TypeAdapter<T>::BaseType BaseType;
+
+    //! mol identifer
+    typedef MOLFunctorIdentifier<2,FunctorID::cylindricalCDRMarc> mol_type;
+    
+    MarcCDRCylindrical2D(int n = 0):rhs_(n),u_(n){
+      ParameterData PM;
+      //! use absolute path here!
+      PM.read_from_file("/home/mfein/MARC++/ode/datafiles/cylindrical_CDR.dat");
+      nz_ = PM.get_datum<int>("Nx");  //x-axis
+      nr_ = PM.get_datum<int>("Ny");  //y-axis
+      dz_ = (PM.get_datum<BaseType>("b")-PM.get_datum<BaseType>("a"))/(nz_-1);
+      //! Schiesser only devides by nz_ here
+      dr_ = (PM.get_datum<BaseType>("d")-PM.get_datum<BaseType>("c"))/(nr_-1);
+      //!include bdy point as well
+      drs_ = ntimes<2>(dr_);
+      std::cout << "nz = "<<nz_<<",  nr = "<< nr_ << ",  dz = "<< dz_ << ",  dr = = "<< dr_ << ",  drs = "<<drs_ << std::endl;
+      r_ = z_ = 0.;
+      h_ = PM.get_datum<BaseType>("h");
+      k_ =  PM.get_datum<BaseType>("k");
+      Tw_ = PM.get_datum<BaseType>("Tw");
+      Tkf_ = 0.;
+      cae_ = PM.get_datum<BaseType>("cae");
+      Tke_ = PM.get_datum<BaseType>("Tke");
+      rk0_ = PM.get_datum<BaseType>("rk0");
+      E_ = PM.get_datum<BaseType>("E");
+      R_ = PM.get_datum<BaseType>("R");
+      rk_ = 0.;
+      Dc_ = PM.get_datum<BaseType>("Dc");
+      v_ = PM.get_datum<BaseType>("v");
+      Dt_ = PM.get_datum<BaseType>("Dt");
+      dH_ = PM.get_datum<BaseType>("dH");
+      rho_ = PM.get_datum<BaseType>("rho");
+      Cp_ = PM.get_datum<BaseType>("Cp");
+      
+      int npt = nz_*nr_;
+      //only in size of a slide
+      u_.resize(2*npt); //copy of vec containing physical quantities
+
+      init_ = dr2_ = dr1_= dZ_ = T();
+    }
+
+    std::size_t dim() const {return rhs_.size();}
+    std::size_t domain_dim() const {return rhs_.size();}
+
+    //! BOUNDARY
+    template<class X>
+    void set_boundary(X& w){
+       //! nz_ = #points in x-axis, nr_ = #points in y-axis
+      //! BOUNDARY TREATMENT --> implementation of Eqs. 13.7 - 13.9 and
+      //                         Eqs. 13.11 - 13.13
+      // set rhs_|bdy to ZERO cause w is updated at boundary explicitely
+      
+      for(int i = 0; i < nz_; ++i){
+	z_ = i*dz_; //r = 0
+	//!DOWN -- where the singularity occurs
+	// smart_assign(w[OFF(i,0,CONC)], w[OFF(i,1,CONC)]); //1st order 0-Neumann //Abs(1./3.*(4*w[OFF(i,1,CONC)]-w[OFF(i,2,CONC)]));//2nd order 
+	// smart_assign(w[OFF(i,0,TEMP)], w[OFF(i,1,TEMP)]); //1st order 0-Neumann //Abs(1./3.*(4*w[OFF(i,1,TEMP)]-w[OFF(i,2,TEMP)]));//2nd order 
+	// rhs_[OFF(i,0,CONC)] = rhs_[OFF(i,0,TEMP)] = 0.0;
+
+	rhs_[OFF(i,0,CONC)] = Dc_*(2.0*(w[OFF(i,1,CONC)]-w[OFF(i,0,CONC)])/drs_ + 2.0*(w[OFF(i,1,CONC)]-w[OFF(i,0,CONC)])/drs_) - v_*(dz(i,0,CONC)) - rk0_*exp(-E_/(R_*w[OFF(i,0,TEMP)]))*ntimes<2>(w[OFF(i,0,CONC)]);
+
+	rhs_[OFF(i,0,TEMP)] = Dt_*(2.0*(w[OFF(i,1,TEMP)]-w[OFF(i,0,TEMP)])/drs_ + 2.0*(w[OFF(i,1,TEMP)]-w[OFF(i,0,TEMP)])/drs_) - v_*(dz(i,0,TEMP)) - dH_/(rho_*Cp_)*rk0_*exp(-E_/(R_*w[OFF(i,0,TEMP)]))*ntimes<2>(w[OFF(i,0,CONC)]);
+	
+	//!UP
+	r_= (nr_-1)*dr_;
+
+	// smart_assign(w[OFF(i,nr_-1,CONC)], w[OFF(i,nr_-2,CONC)]); //1st order 0-Neumann //Abs(1./3.*(4*w[OFF(i,nr_-2,CONC)] - w[OFF(i,nr_-3,CONC)]));  //2nd order 
+
+	// smart_assign(w[OFF(i,nr_-1,TEMP)], Abs((dr_*h_/k_*Tw_ - w[OFF(i,nr_-2,TEMP)])/(dr_*h_/k_-1))); //Abs((2.*dr_*h_/k_*Tw_ + 4*w[OFF(i,nr_-2,TEMP)] - w[OFF(i,nr_-3,TEMP)])/(3 + 2*dr_*h_/k_)); // 2nd order //(dr_*h_/k_*Tw_ - w[OFF(i,nr_-2,TEMP)])/(1.+dr_*h_/k_); //explicit solution for bdy point
+
+	// rhs_[OFF(i,nr_-1,CONC)] = rhs_[OFF(i,nr_-1,TEMP)] = 0.0;
+	
+	rhs_[OFF(i,nr_-1,CONC)] = Dc_*(drr(i,nr_-1,CONC) + dr(i,nr_-1,CONC))-v_*dz(i,nr_-1,CONC) - chemistry(i,nr_-1);
+	rhs_[OFF(i,nr_-1,TEMP)] = Dt_*(drr(i,nr_-1,TEMP) + dr(i,nr_-1,TEMP))-v_*dz(i,nr_-1,TEMP) - dH_/(rho_*Cp_)*chemistry(i,nr_-1);
+
+      }
+
+      for(int j = 0; j < nr_; ++j){ //range ok??
+	r_ = j*dr_;
+	//!LEFT
+	smart_assign(w[OFF(0,j,CONC)], cae_);
+        smart_assign(w[OFF(0,j,TEMP)], Tke_);
+	rhs_[OFF(0,j,CONC)] = rhs_[OFF(0,j,TEMP)] = 0.;
+	
+
+	// rhs_[OFF(0,j,CONC)] = Dc_*(drr(0,j,CONC) + dr(0,j,CONC))-v_*dz(0,j,CONC) - chemistry(0,j);
+	// rhs_[OFF(0,j,TEMP)] = Dt_*(drr(0,j,TEMP) + dr(0,j,TEMP))-v_*dz(0,j,TEMP) - dH_/(rho_*Cp_)*chemistry(0,j);
+
+	//!RIGHT
+	z_ = (nz_-1)*dz_;
+	rhs_[OFF(nz_-1,j,CONC)] = Dc_*(drr(nz_-1,j,CONC) + dr(nz_-1,j,CONC))-v_*dz(nz_-1,j,CONC) - chemistry(nz_-1,j);
+	rhs_[OFF(nz_-1,j,TEMP)] = Dt_*(drr(nz_-1,j,TEMP) + dr(nz_-1,j,TEMP))-v_*dz(nz_-1,j,TEMP) - dH_/(rho_*Cp_)*chemistry(nz_-1,j);
+
+	// smart_assign(w[OFF(nz_-1,j,CONC)], w[OFF(nz_-2,j,CONC)]);
+	// smart_assign(w[OFF(nz_-1,j,TEMP)], w[OFF(nz_-2,j,TEMP)]);
+	// rhs_[OFF(nz_-1,j,CONC)] = rhs_[OFF(nz_-1,j,TEMP)] = 0.0;
+      }
+
+
+    }
+    
+    //! this follows closely the implementation of Schiesser. Note however that
+    //! it takes much more time since a lot of additional vectors are used
+    //! for better representation
+    template<class X>
+    VType& operator()(const X& U){
+      //! do a local copy here
+      u_ = U;
+
+      (*this).set_boundary(u_); //set boundary and change u_ at bdy points
+      
+      //!INTERIOR:
+      for(int i = 1; i < nz_-1; ++i){
+	z_ = i*dz_;
+	for(int j = 1; j < nr_-1; ++j){
+	  r_ = j*dr_;
+
+	  if(!is_well_defined_value(u_[OFF(i,j,CONC)]) || !is_well_defined_value(u_[OFF(i,j,TEMP)])){
+	    ADONIS_ERROR(ValueError,"c("<<i<<", "<<j<<") = "<<u_[OFF(i,j,CONC)] << ",  T("<<i<<", "<<j<<") = "<<u_[OFF(i,j,TEMP)]<<".");
+	  }
+
+	  rk_ = rk0_*exp(-E_/(R_*u_[OFF(i,j,TEMP)]))*ntimes<2>(u_[OFF(i,j,CONC)]);
+	  rhs_[OFF(i,j,CONC)] = Dc_*( (u_[OFF(i,j+1,CONC)]-2.*u_[OFF(i,j,CONC)]+u_[OFF(i,j-1,CONC)])/drs_ + (1./r_)*(u_[OFF(i,j+1,CONC)]-u_[OFF(i,j-1,CONC)])/(2.*dr_) ) - v_*( (u_[OFF(i,j,CONC)]-u_[OFF(i-1,j,CONC)])/dz_ ) -rk_;
+
+	  rhs_[OFF(i,j,TEMP)] = Dt_*( (u_[OFF(i,j+1,TEMP)]-2.*u_[OFF(i,j,TEMP)]+u_[OFF(i,j-1,TEMP)])/drs_ + (1./r_)*(u_[OFF(i,j+1,TEMP)]-u_[OFF(i,j-1,TEMP)])/(2.*dr_) ) - v_*( (u_[OFF(i,j,TEMP)]-u_[OFF(i-1,j,TEMP)])/dz_ ) - dH_/(rho_*Cp_)*rk_;
+
+	  //! check that no silly values can occur
+	  adonis_assert(is_well_defined_value(rhs_[OFF(i,j,CONC)]));
+	  adonis_assert(is_well_defined_value(rhs_[OFF(i,j,TEMP)]));
+	}
+      }
+      return rhs_;
+    }
+
+    const VType& get_copy() const {return u_;}
+
+    //dummy function
+    template<class ITER>
+    void get_y_prev(ITER it, const T& s){}
+ 
+  private:
+	
+	enum{CONC = 0,TEMP = 1};
+
+    
+    //!  this is row-oriented unlike the orignial, which is Matlab-column
+    //! oriented
+    int OFF(int i, int j, int quant){
+      //adonis_assert((i >= 0) && (i < nz_) && (j >= 0) && (j < nr_) && (quant >= 0) && (quant >= 0) && (quant < 2));
+      if((i < 0) || (i >= nz_) || (j < 0) || (j >= nr_) || (quant < 0) || (quant >= 2)){
+	ADONIS_ERROR(IndexError, "Index out of range: i = "<<i<<", j = "<<j<<", quant = "<<quant<<".");
+      }
+      return (i + nz_*j + quant*nr_*nz_);
+    }
+
+    //! only for slide containing nr_*nz_ points
+    int OFF(int i, int j){
+      //adonis_assert((i >= 0) && (i < nz_) && (j >= 0) && (j < nr_));
+      if((i < 0) || (i >= nz_) || (j < 0) || (j >= nr_)){
+	ADONIS_ERROR(IndexError, "Index out of range: i = "<<i<<", j = "<<j<<".");
+      }
+      return (i + nz_*j);
+    }
+
+    T chemistry(int i, int j){
+      return (rk0_*exp(-E_/(R_*u_[OFF(i,j,TEMP)]))*ntimes<2>(u_[OFF(i,j,CONC)]) );
+    }
+    
+    // 1/r dz u
+    T dr(int i, int j, int quant) {
+      adonis_assert((quant >= 0) && (quant <= 1));
+      if(j == 0){
+	dr1_ =  2.0*(u_[OFF(i,j+1,quant)]-u_[OFF(i,j,quant)])/drs_;
+      }
+      else if(j == nr_-1){
+	if(quant == 0){
+	  dr1_ = 0.0;
+	}
+	else{ //quant = 1
+	  dr1_ = 1/r_*(h_/k_)*(Tw_-u_[OFF(i,j,TEMP)]);
+	}
+      }
+      else{
+	dr1_ = (1.0/r_)*(u_[OFF(i,j+1,quant)]-u_[OFF(i,j-1,quant)])/(2.0*dr_);
+      }
+      adonis_assert(is_well_defined_value(dr1_));
+      return dr1_;
+    }
+    
+    T drr(int i, int j, int quant) {
+      adonis_assert((quant >= 0) && (quant <= 1));
+      if(j == 0){
+	dr2_ = 2.0*(u_[OFF(i,j+1,quant)]-u_[OFF(i,j,quant)])/drs_;
+      }
+      else if(j == nr_-1){
+	if(quant == 0){
+	  dr2_ = 2.0*(u_[OFF(i,j-1,CONC)]-u_[OFF(i,j,CONC)])/drs_;
+	}
+	else{ //quant = 1
+	  Tkf_= u_[OFF(i,j-1,TEMP)]+2.0*dr_*h_/k_*(Tw_-u_[OFF(i,j,TEMP)]);
+	  dr2_ = (Tkf_-2.0*u_[OFF(i,j,TEMP)]+u_[OFF(i,j-1,TEMP)])/drs_;
+	}
+      }
+      else{
+	dr2_ = (u_[OFF(i,j+1,quant)]-2.0*u_[OFF(i,j,quant)]+u_[OFF(i,j-1,quant)])/drs_;
+      }
+      adonis_assert(is_well_defined_value(dr2_));
+      return dr2_;
+    }
+    
+    T dz(int i, int j, int quant) {
+      adonis_assert((quant >= 0) && (quant <= 1));
+      init_ = ( (quant == 0) ? cae_ : Tke_);
+      dZ_= ( (i==0) ? ( (u_[OFF(i,j,quant)] - init_)/dz_ ) : ( (u_[OFF(i,j,quant)] - u_[OFF(i-1,j,quant)])/dz_ ) );
+       adonis_assert(is_well_defined_value(dZ_));
+       return dZ_;
+    }
+    
+    VType rhs_, u_; 
+    int nz_, nr_;
+    T dr_, dz_, drs_, r_, z_, h_, k_, Tw_, Tkf_, cae_, Tke_ ,rk0_, E_, R_, rk_,
+      Dc_, v_, Dt_, dH_, rho_, Cp_;
+    T init_, dr2_, dr1_, dZ_;
+   
+  };
+
+
+ 
+} //end namespace 
+
+
+#endif

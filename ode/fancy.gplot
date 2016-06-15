@@ -1,0 +1,56 @@
+reset
+
+### Uncomment the following lines to create an .eps or .svg (better) file
+#set out 'multi.eps'   #'multi.svg'
+#set term svg size 600,400 dynamic enhanced fname 'arial' fsize 11 butt solid
+
+set multiplot
+set lmargin screen 0.20
+set rmargin screen 0.85
+set bmargin screen 0.25
+set tmargin screen 0.90
+
+set pm3d map
+set palette rgbformulae 33,13,10
+set samples 50, 50
+set isosamples 50, 50
+set xrange [ -15.00 : 15.00 ]
+set yrange [ -15.00 : 15.00 ]
+set cbrange [ -0.250 : 1.000 ]
+set cbtics -0.25,0.25,1
+
+unset xtics
+unset ytics
+unset key
+
+splot sin(sqrt(x**2+y**2))/sqrt(x**2+y**2)
+unset pm3d
+set lmargin screen 0.10
+set rmargin screen 0.20
+set ytics
+
+set parametric
+set dummy u,v
+set view map
+
+f(h) = sin(sqrt(h**2))/sqrt(h**2)
+
+set urange [ -15.00 : 15.00 ]
+set vrange [ -15.00 : 15.00 ]
+set xrange [*:*]
+set surface
+
+splot f(u), u, 0 with lines lc rgb "green"
+
+unset parametric
+set lmargin screen 0.20
+set rmargin screen 0.85
+set bmargin screen 0.10
+set tmargin screen 0.25
+set xrange [ -15.00 : 15.00 ]
+set yrange [ * : * ]
+set xtics
+unset ytics
+
+plot sin(sqrt(x**2))/sqrt(x**2)
+unset multiplot

@@ -1,0 +1,32 @@
+## SETTING FOR 2D FINITE DIFFERENCE METHOD 
+##
+
+# Print settings
+savestep: 1
+saveinterval: 1.e-09 #0.00001  	
+
+nthstep: 10
+
+# Domain: Rectangle: [a,b] x [c,d]
+a: 0.
+b: 0.02
+c: 0.
+d: 0.005
+
+# Number of grid points in x-direction, number of grid points in y-direction
+Nx: 65 #33  #65
+Ny: 17 #9   #17  
+
+## BOUNDARY RELEVANT DATA
+hottest_x: 0.005         #in meter Braack: 0.005
+
+T_ignition:   1000.    #Braack: 800.
+T_min: 300.            #Braack: 298.
+
+pconst: 101325     # atmospheric pressure
+
+#inlet speed
+v1_in: 0.6      
+v2_in: 0.0
+
+T_in: 300

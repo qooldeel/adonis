@@ -1,0 +1,42 @@
+###
+###  Data for the extended Zeldovich mechanism
+###
+###        O + N2 <--> NO + N         //Zeldovich
+###        N + O2 <--> NO + O         //Zeldovich
+###        N + OH <--> NO + H         //Lavoie, Heywood, Keck
+
+
+t0:    0.
+tend:  2.e-6
+
+hEstim: 5e-09 #1.e-08 
+
+hred: 1.e-8
+
+prescale: 1.e-06   # 1. or 1.e-06
+
+### initial values. CAUTION, mass fractions, so they must obey sum(x_i) = 1!!
+O:  0.05
+N2: 0.25
+NO: 0.15
+N:  0.065
+O2: 0.085
+OH: 0.15
+H:  0.25
+
+Temperature: 2200   # should be above 1873.15 K
+
+Tmin: 1873.15
+Tmax: 2400
+
+p0: 101325
+
+
+timestepper: E   # e,E = explicit, i,I = implicit
+
+showfullgraphs: false
+
+##reduced setting
+### use reduced evaluation of cp and heat production for temperature source
+
+reduced_cp_heat:  true

@@ -1,0 +1,51 @@
+# These are the data for the globally convergent augemented Lagrangian method
+#                            ------------------------------------------------
+#
+# NOTE: -Make sure that a keyword and a value are separated by ':'
+#       -Don't use windows style i.e. don't separate a keyword by 
+#        whitespace characters
+#  
+# these are typical parameters for a well-scaled problem, cf. [Conn et al., "A 
+# globally convergent augmented Lagrangian method", SIAM J. on Numerical 
+# Analysis, Vol. 28, No. 2 (1991), p. 553]
+#
+# CAUTION: DO NOT CHANGE THE PARAMETER NAMES HERE; ONLY CHANGE VALUES TO THE
+# RIGHT OF THE COLON (:) ;)
+
+
+# best staring mu: lancelot: 1.e+03,1.e+05 crosscheck: 1.e+04
+#
+mu0:       1.e+03   #PENALTY PARAMETER (to be chosen rather big, e.g. 1.e+3)
+	   
+# max number of iterations
+maxit:     15
+
+eta0:      1.
+omega0:    1
+tau:       0.01
+gamma1:    0.1
+omegaStar: 1e-04
+etaStar:   1e-04
+alphaW:    1
+betaW:     1
+alphaE:    0.1
+betaE:     0.9
+
+#general parameters
+aboveEps: 1.e+05                #value = 0 <==> |value| <= macheps*aboveEps
+
+#parameters for INNER iteration, TR methods
+cgMaxiter: 20                         #max number of allowed iterations for CG
+trMaxiter: 75                         #max number of TR iterations
+
+
+#beware values of getting too small (or vice versa), hence less ill-conditioning
+muMin: 1.e-06
+
+#trust region + TR-radius 
+delta0:    0.2   #0.005
+deltaMin:  1.e-09
+deltaMax:  0.45
+trgamma:   0.15                          #for TR radius update
+trtol:     1.e-04      #1.e-05           #TR stopping tolerance, i.e.
+                                    # stop when ||g(x)||<=trtol·min(1,||g(x0)||)

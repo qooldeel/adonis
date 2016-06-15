@@ -1,0 +1,370 @@
+#ifndef ONE_DIM_H2C6_MECH_WITH_DIFFUSION_HH
+#define  ONE_DIM_H2C6_MECH_WITH_DIFFUSION_HH
+
+#include "../expressiontemplates/exprvec.hh"
+#include "../io/readinparameters.hh"
+#include "../massactionkinetics/data/thermochemicaldata.hh"
+#include "../moleculartransport/diffusion.hh"
+#include "../ode/sourceterms.hh"
+#include "../linalg/linearsystemsolvers.hh"
+#include "../derivatives/jacobianofsource.hh"
+#include "../templatemetaprograms/unrollloop.hh"
+#include "../misc/operations4randomaccesscontainers.hh"
+
+#include "speciesreconstruction.hh"
+
+namespace Adonis{
+
+  template<class T>
+  class H2C61stApproxMyMethod{
+  public:
+    typedef T value_type;
+    typedef ExprTmpl::MyVec<T> VType;
+    typedef typename TypeAdapter<T>::Type DType;
+    typedef ExprTmpl::MyVec<DType> VDType;
+    typedef typename TypeAdapter<T>::BaseType BaseType;
+    typedef std::size_t SizeType;
+
+    typedef ThermoData4Mechanism<DType,6> DataType;
+    typedef MixtureAveragedDiffusion<DataType,true> DiffusionType;
+    
+    typedef H2Combustion6Spex<T> FullModel;
+    typedef Norm<'2',BaseType> NormType;
+    typedef JacS<DType,H2Combustion6Spex,ExprTmpl::MyVec> JacobianType;
+
+    typedef SpeciesReconstruction<DType,6,2,H2Combustion6Spex,6> ReconstrType;
+
+    H2C61stApproxMyMethod(int n = 0):fullode_(6){
+      ParameterData PD;
+      PD.read_from_file("/home/mfein/MARC++/modred/dat/h2c6.dat");
+      nx_ = PD.get_datum<int>("nx");
+      hx_ = (PD.get_datum<DType>("b")-PD.get_datum<DType>("a"))/(nx_-1);
+     
+      std::cout << " IN FUNCTION: hx_ = "<< hx_ << std::endl;
+      rhs_.resize(2*nx_);  //2 species, nx points
+      
+      zM_.resize(6);
+      zM0_.resize(6);
+      zM0_ <<= 
+	PD.get_datum<DType>("H2"),  
+      	PD.get_datum<DType>("H"),
+      	PD.get_datum<DType>("O2"),
+      	PD.get_datum<DType>("O"),
+      	PD.get_datum<DType>("H2O"),
+      	PD.get_datum<DType>("OH");
+
+      zM_ = zM0_;  //initial guess
+
+	
+
+      C_.resize(2*6);
+      b_.resize(2); 
+      z_.resize(6);
+
+      C_ <<= 2, 1, 0, 0, 2, 1,
+	0, 0, 2, 1, 1, 1;
+      
+      b_ <<= 2, 1; 
+      
+
+      up_.resize(6);
+      up_ <<= 1.e+15,1.e+15,1.e+15,1.e+15,1.e+15,1.e+15; //infty
+      low_.resize(6); //zero
+
+      u_.resize(2*nx_);
+
+      RedXfrac_.resize(2);
+      RedXfrac0_.resize(2);
+      RedXfrac1_.resize(2);
+
+      residual_.resize(2);
+
+      Mad_.initialize(DataType::transport());
+      Mad0_.initialize(DataType::transport());
+      Mad1_.initialize(DataType::transport());
+
+      maxIt_ = PD.get_datum<int>("maxIt");
+      maxNewt_ = PD.get_datum<int>("maxNewt");
+      
+      tol_ = PD.get_datum<BaseType>("tol");
+      newtTol_ = PD.get_datum<BaseType>("newtTol");
+
+      p0_ = PD.get_datum<DType>("p0");
+      Temp_ = PD.get_datum<DType>("temperature");
+
+      kn_ = PD.get_datum<DType>("kn");
+      whichTimeStepper_ = PD.get_datum<bool>("whichTimestepper");
+      count_ = 1;
+      fulldim_ = 6;
+
+      g_.resize(2);
+      defect_.resize(6);
+      G_.resize(6);
+      Gprime_.resize(6*6);
+
+      dotomega_.resize(6);
+
+      NablaChem_.set_with_init(6,6,zM_);
+
+      reconstr_.initialize(zM0_,kn_,newtTol_,DataType::rpv_index(),C_,b_);
+
+    }
+
+    template<class X>
+    VType& operator()(const X& redconc){
+      u_ = redconc; //hard_copy
+
+      //BOUNDARY -- PERIODIC BOUNDARY CONDITIONS
+      for(int k = 0; k < 2; ++k){
+       	u_[OFF(0,k)] = 	u_[OFF(nx_-1,k)]; 
+      }
+      
+
+
+      //INTERIOR
+      for(int i = 1; i < nx_-1; ++i){
+
+
+	//compute rho from concentrations
+	//RedXfrac0_ =(u_*wbar(i-1,u_))/rho(i-1,u_);
+	RedXfrac_ =(u_*wbar(i,u_))/rho(i,u_);
+	//RedXfrac1_ =(u_*wbar(i+1,u_))/rho(i+1,u_);
+
+	Mad_.compute_mixture_averaged_diffusion_coefficients(p0_,Temp_,RedXfrac_);
+	//Mad0_.compute_mixture_averaged_diffusion_coefficients(p0_,Temp_,RedXfrac0_);
+	//Mad1_.compute_mixture_averaged_diffusion_coefficients(p0_,Temp_,RedXfrac1_);
+
+	chemistry(dotomega_,u_,zM_);
+
+	for(int k = 0; k < 2; ++k){
+	  //std::cout << "D(i-1)_"<<k<< " = "<< Mad0_[k] <<  "    D(i)_"<<k<< " = "<< Mad_[k] << "    D(i+1)_"<<k<< " = "<< Mad1_[k] << std::endl;
+	  
+	  rhs_[OFF(i,k)] = Mad_[k]*(u_[OFF(i+1,k)] -2*u_[OFF(i,k)] + u_[OFF(i-1,k)])/ntimes<2>(hx_) //(0.5*(Mad1_[k] + Mad_[k])*(u_[OFF(i+1,k)]-u_[OFF(i,k)]) - 0.5*(Mad_[k] + Mad0_[k])*(u_[OFF(i,k)]-u_[OFF(i-1,k)]))/ntimes<2>(hx_) 
+	    + dotomega_[k];
+	}
+      }
+      return rhs_;
+    }
+    
+  private:
+    enum{H2,H2O};
+    FullModel fullode_;
+    int nx_;
+    DType hx_;
+    VType rhs_, zM0_, zM_, up_, low_, u_, 
+      RedXfrac0_,RedXfrac_,RedXfrac1_,  z_prev_, z_nu_, dotomega_, G_,Gprime_,;
+    DiffusionType Mad_, Mad0_, Mad1_;
+
+    int maxIt_, maxNewt_;
+    BaseType tol_, newtTol_;
+   
+    T p0_, Temp_, rho_;
+
+    VDType C_, b_, z_, g_, residual_,defect_;
+
+    DType kn_;
+    bool whichTimeStepper_;
+    int count_,fulldim_;
+    JacobianType NablaChem_;
+    
+    ReconstrType reconstr_;
+    
+    int OFF(int i, int spec) const{
+      return (i + spec*nx_);
+    }
+
+    T rho(int i, const VType& u){
+      // if(is_zero(u[OFF(i,H2)]) && is_zero(u[OFF(i,H2O)])){
+      // 	u[OFF(i,H2)] += 1.e-12;
+      // 	u[OFF(i,H2O)] += 1.e-12;
+      // }
+	
+
+      T r = u[OFF(i,H2)]*DataType::molar_masses()[0] + u[OFF(i,H2O)]*DataType::molar_masses()[4];
+      if(is_zero(r))
+       	ADONIS_ERROR(ZeroDivision, "rho(i,u) ~ 0 at point i = "<<i<<".");
+
+      return r;
+    }
+
+    T wbar(int i, const VType& u){
+      return rho(i,u_)/(u[OFF(i,H2)]+u[OFF(i,H2O)]);
+    }
+  
+    VType& chemistry(VType& dotom, const VType red, const VType& full){
+      zM_ = reconstr_.evaluate(red,full);
+      std::cout << "zM_ = "<< zM_ << std::endl;
+
+      const int nor = 12;
+      T pk[nor]; //reaction rates 
+      T	rV[nor];      //reaction velocities
+
+      pk[0] = 2.0;
+      pk[1] = 1.0;
+      pk[2] = 1.0;
+      pk[3] = 1000.0;
+      pk[4] = 1000.0;
+      pk[5] = 100.0;
+      pk[6] = 216.0;
+      pk[7] = 337.5;
+      pk[8] = 1400.0;
+      pk[9] = 10800.0;
+      pk[10] = 33750.0;
+      pk[11] = 0.7714;
+
+      rV[0]  =  pk[0]*zM_[0];
+      rV[1]  =  pk[6]*zM_[1]*zM_[1];
+      rV[4]  =  pk[2]*zM_[4];
+      rV[5]  =  pk[8]*zM_[1]*zM_[5];
+      rV[6]  =  pk[3]*zM_[0]*zM_[3];
+      rV[7]  =  pk[9]*zM_[1]*zM_[5];
+      rV[10] =  pk[5]*zM_[0]*zM_[3];
+      rV[11] =  pk[11]*zM_[4];
+
+      dotom[0] =  - rV[0]  + rV[1]              //H2
+      - rV[6]  + rV[7]
+      - rV[10] + rV[11];;  //H2
+
+      dotom[1] = - rV[4]  + rV[5]               //H2O
+      + rV[10] - rV[11];;  //H2O
+	
+      std::cout << "omega'[0] = "<<dotom[0] << std::endl;
+      std::cout << "omega'[1] = "<<dotom[1] << std::endl;
+
+
+      return dotom;
+    }
+  
+  
+    // VType& chemistry(VType& dotom, const VType red, const VType& full){
+    //   zM_[0] = red[0];  //H2
+    //   zM_[4] = red[1];  //H2O
+
+    //   UnrollLoop<0,6>::assign(z_.begin(),zM_.begin());
+    //   residual_ = matrix_vector_product(C_,z_) - b_;
+
+    //    bool isperturbed(false);
+
+    //   if(NormType::norm(residual_) > 1.e-09){
+    // 	//!perform "Gauss-Newton" iteration
+    // 	int m = (int)b_.size();
+    // 	for(SizeType nu = 1; nu <= maxIt_; ++nu){
+    // 	  count_ = nu;
+    // 	  UnrollLoop<0,6>::assign(z_.begin(),zM_.begin());
+    // 	  g_ = -matrix_vector_product(C_,z_) + b_;
+    // 	  defect_ = solve_rank_deficient_ls(C_,m,g_,1); 
+    // 	  zM_ += defect_;
+    // 	  if(NormType::norm(defect_) <= tol_)
+    // 	    break;  //leave loop since convergence has been achieved
+    // 	}
+    // 	if(count_ == maxIt_)
+    // 	  ADONIS_INFO(Information, "Max. number of iterations reached (maxit = "<< maxIt_ << ").\n   No convergence with tol = "<< tol_ << ".");
+     
+    // 	isperturbed = true;
+    //   }
+
+    //    //! 2.) Project on bounds
+    //   // assign back to zM_
+    //   if(isperturbed)
+    // 	zM_ = Max(low_,Min(zM_,up_));
+
+    //    //! 3.) Perform 1 implicit or expl. Euler time step
+    //   //! note that we use the full model, i.e. the full $\dot{\omega}$ here!!,
+    //   //! that is it is principally available for temperature evaluation of 
+    //   //! reduced temperature
+    //   // if(whichTimeStepper_ == 'i' ||  whichTimeStepper_ == 'I'){
+    //   // 	// std::cout << "IMPL. EULER" << std::endl;
+    //   // 	// z_prev_ = zM_;
+    //   // 	// z_nu_ = z_prev_; 
+    //   // 	// count_ = 1; //reset
+    //   // 	// for(SizeType l = 1; l <= maxNewt_; ++l){
+    //   // 	//   G_ = -(z_nu_ - z_prev_ - kn_*fullode_(z_nu_));
+    //   // 	//   Gprime_ = -kn_*NablaChem_.jacobian(z_nu_);
+    //   // 	//   //print_in_matrix_style(Gprime_,fulldim_);
+    //   // 	//   update_diagonal<AddBasicElements>(Gprime_,fulldim_,1.);
+    //   // 	//   good_square_solve(Gprime_,fulldim_,G_,1);
+    //   // 	//   z_nu_ += G_;
+
+    //   // 	//   if(NormType::norm(G_) <= newtTol_){
+    //   // 	//     //---- ASSIGN -------
+    //   // 	//     zM_ = z_nu_;
+    //   // 	//     //---------------------
+    //   // 	//     break;
+    //   // }
+
+    //   // 	  if(l == maxNewt_){
+    //   // 	    ADONIS_INFO(Information, "Maximum number of Newton iterations ("<<maxNewt_<<") reached. Decrease kn_....");
+    //   // 	    l = 0; //set back i and repeat with kn/2 
+    //   // 	    kn_ *= 0.5;
+    //   // 	  }
+
+    //   // 	  adonis_assert(Abs(kn_) >= 1.e-12); //don't let kn_ become too small
+
+    //   // 	  count_++;
+
+    //   // 	  if(count_ == 4*maxNewt_){
+    //   // 	    ADONIS_INFO(Information, "After 4 iterations with decreasing stepsize, there hasn't been encountered any convergence...");
+    //   // 	    zM_ = z_nu_;
+    //   // 	    break;  //o.k. 4 times with decreasing step size yielded no result
+    //   // 	  }
+    //   // 	} //end NEWTON iter
+    //   // }
+      
+    //   //else 
+    //   //if (whichTimeStepper_ == 'e' || whichTimeStepper_ == 'E'){
+    //   	//perform explicit EULER step
+    //   	std::cout << "EX. EULER" << std::endl;
+    //   	zM_ += kn_*fullode_(zM_);
+    // 	//}
+    // 	//else
+    //   	ADONIS_ERROR(NotImplementedError,"Time stepping method whichTimeStepper_ = "<<whichTimeStepper_ << " undefined.");
+
+    //   std::cout << "zM (time step) = "<< zM_ << std::endl;
+
+    //   //REDUCED source terms
+    //   const size_t nor = 12;   //number of reactions involved
+      
+    //   T pk[nor]; //reaction rates 
+    //   T	rV[nor];      //reaction velocities
+
+    //   pk[0] = 2.0;
+    //   pk[1] = 1.0;
+    //   pk[2] = 1.0;
+    //   pk[3] = 1000.0;
+    //   pk[4] = 1000.0;
+    //   pk[5] = 100.0;
+    //   pk[6] = 216.0;
+    //   pk[7] = 337.5;
+    //   pk[8] = 1400.0;
+    //   pk[9] = 10800.0;
+    //   pk[10] = 33750.0;
+    //   pk[11] = 0.7714;
+
+    //   rV[0]  =  pk[0]*zM_[0];
+    //   rV[1]  =  pk[6]*zM_[1]*zM_[1];
+    //   rV[4]  =  pk[2]*zM_[4];
+    //   rV[5]  =  pk[8]*zM_[1]*zM_[5];
+    //   rV[6]  =  pk[3]*zM_[0]*zM_[3];
+    //   rV[7]  =  pk[9]*zM_[1]*zM_[5];
+    //   rV[10] =  pk[5]*zM_[0]*zM_[3];
+    //   rV[11] =  pk[11]*zM_[4];
+
+    //   dotom[0] =  - rV[0]  + rV[1]              //H2
+    //   - rV[6]  + rV[7]
+    //   - rV[10] + rV[11];;  //H2
+
+    //   dotom[1] = - rV[4]  + rV[5]               //H2O
+    //   + rV[10] - rV[11];;  //H2O
+	
+
+    //   return dotom;
+    // }
+
+  };
+
+}//end namespace
+
+#endif
+
+
+

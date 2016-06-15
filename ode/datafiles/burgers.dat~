@@ -1,0 +1,20 @@
+###
+###
+##    Settings for Burger's equation
+###
+###
+
+nthstep: 10
+
+Nx: 201
+a: 0.0
+b: 1.0
+
+vis: 0.003
+
+##stepsize
+hEstim: 0.1
+
+## time horizon
+t0: 0.
+tf: 1.

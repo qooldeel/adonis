@@ -1,0 +1,25 @@
+#ifndef IMPOSE_PHYSICAL_BOUNDARY_CONDITIONS_HH
+#define IMPOSE_PHYSICAL_BOUNDARY_CONDITIONS_HH
+
+#include "../../common/globalfunctions.hh"
+#include "../../fdm/gensettings.hh"
+
+namespace Adonis{
+
+
+  template<int DIM, bool ISRECTANGULAR>
+  class BoundaryConditions{
+  public:
+    
+    void init(const std::string& filename){}
+
+    template<class V>
+    void impose(V& u) {}
+  };
+
+  //! partial specialization for rectangular 2D boundary
+  
+
+}
+
+#endif

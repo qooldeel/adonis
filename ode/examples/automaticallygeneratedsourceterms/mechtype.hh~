@@ -1,0 +1,16 @@
+#ifndef MECHANISM_TYPE_NOTIFIER_FOR_AUTOMATICALLY_GENERATED_CHEMISTRY_HH
+#define MECHANISM_TYPE_NOTIFIER_FOR_AUTOMATICALLY_GENERATED_CHEMISTRY_HH
+
+#include <string>
+
+namespace Adonis{
+
+
+  class ChemMechTypePresent{
+  public:
+    
+  };
+
+} // end namespace
+
+#endif

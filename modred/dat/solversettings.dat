@@ -1,0 +1,53 @@
+### gnuplot 2 LaTeX-output
+latex: false
+
+
+setylabel: false   #set ylabel
+
+width:  8.5
+height: 7.0
+unit: cm
+outfilename:  full_Temp_redzeldovich_5e09_TWO_species
+outfilename2: full_Temp_redzeldovich_5e09_TWO_temperature
+
+#######################################
+##### CONSIDER ONLY ODE here ##########
+#######################################
+ODE_t0:      0.
+ODE_tend:    2 #0.7  #0.11
+
+#1.) IMPLICIT SOLVER
+ODE_IE_maxsteps:        500000
+ODE_IE_maxNewtoniters:  7
+ODE_IE_ntol:            1.e-06
+ODE_IE_rtol:            1.e-06  
+ODE_IE_hEstim:          0.0015 #1.2e-04 #0.001     
+ODE_IE_Cscal:           1.
+ODE_IE_hmin:            1.15e-09
+ODE_IE_hmax:            1.35e-02
+
+# 1.1) Reduced params (use those of full problem unless otherwise stated)
+  ODE_IE_REDUC_ntol:            1.e-06   #prev: 1.e-04
+  ODE_IE_REDUC_rtol:            1.e-06   #prev: 1.e-03
+  ODE_IE_REDUC_hEstim:         0.0015 #1.2e-04  #0.001   
+
+#2.) EXPLICIT SOLVER 4 STIFF PROBLEMS
+ODE_E4S_maxFixIter: 7
+ODE_E4S_errtol:     1.e-06
+ODE_E4S_tolFixPt:   1.e-06
+ODE_E4S_hEst:       0.000012
+ODE_E4S_St:         1.
+ODE_E4S_cs:         0.98
+ODE_E4S_kmin:       1.15e-09
+ODE_E4S_kmax:       0.00125
+
+# 2.1) Reduced params
+  ODE_E4S_REDUC_errtol:    1.e-07
+  ODE_E4S_REDUC_tolFixPt:  1.e-07	     
+  ODE_E4S_REDUC_hEst:      0.00000012
+  ODE_E4S_REDUC_cs:        0.9995
+		    
+
+######################################
+##### 1D DISCRETIZATION ##############
+######################################

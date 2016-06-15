@@ -1,0 +1,140 @@
+############################################################################
+############   SETTING FOR 1D and 2D FINITE DIFFERENCE METHOD   ############
+############################################################################
+##NOTE: Do NOT change names of variables (strings preceding the colon)
+############################################################################
+
+nthstep: 10   #10  # print every 'nthestep' step
+
+# Domain: Rectangle: [a,b] x [c,d]
+# When 1D is considered, only [a,b] becomes meaningful
+a: 0.
+b: 0.009   #0.3 
+c: 0.
+d: 0.0035  #0.0254
+
+# Number of grid points in x-direction, number of grid points in y-direction
+# higher grid numbers may result in a leak 
+Nx: 53   #1D, only this becomes important
+Ny: 23   #17 
+
+## BOUNDARY RELEVANT DATA
+
+hottest_y: 0.003   #0.01905      # 0.0254-0.00635
+
+T_ignition:   1850. #900. #for these mechs, a temp below 1500 K seems to low   
+T_min:        300.         
+
+burner_length: 0.002
+
+pconst: 101325     # atmospheric pressure
+
+#inlet speed
+v1_fuel: 3.3  #0.045        
+v2_fuel: 0.0
+v1_oxi:  7.245  #0.0988
+v2_oxi:  0.0
+
+T_fuel: 300
+T_oxi:  300
+T_wall: 300
+
+
+##smooth function transition
+asmth: 1.2
+bsmth: 0.0001
+
+
+
+#############################
+#############################
+##         ODE             ##
+#############################
+#############################
+
+t0:   0.
+tend: 5e-04 #0.15  #5.e-4  #0.01  # 0.5  #1   #0.06    #1 #1.e-05
+
+
+
+#IV -- taking air (O2: 0.21, H2O: 0.01, N2: 0.78) leads obviously to no reaction
+#take an air-gas mixture that reacts (reasonable amounts of O2 and H2)!!
+O:     0.
+O2:    0.232 #0.15    #0.21
+H:     0.
+OH:    0.
+H2:    0.     #0.35
+HO2:   0.	  
+H2O2:  0.
+H2O:   0.     #0.01    #0.01
+N2:    0.768       #0.49    #0.78
+AR:    0.
+
+
+######
+###  INBETWEEN AREA -- fuel-air mixture
+######
+O_BW:     0.
+O2_BW:    0.18
+H_BW:     0.
+OH_BW:    0.
+H2_BW:    0.36
+HO2_BW:   0.	  
+H2O2_BW:  0.
+H2O_BW:   0.  
+N2_BW:    0.46
+AR_BW:    0.
+
+
+#################################################
+### INLET COMPOSITION
+#####
+##FUEL SIDE
+O_FUEL:     0.
+O2_FUEL:    0.
+H_FUEL:     0.
+OH_FUEL:    0.
+H2_FUEL:    1.
+HO2_FUEL:   0.	  
+H2O2_FUEL:  0.
+H2O_FUEL:   0.  
+N2_FUEL:    0.
+AR_FUEL:    0.
+
+##OXIDIZER SIDE
+O_OXI:     0.
+O2_OXI:    0.232
+H_OXI:     0.
+OH_OXI:    0.
+H2_OXI:    0.
+HO2_OXI:   0.	  
+H2O2_OXI:  0.
+H2O_OXI:   0.  
+N2_OXI:    0.768
+AR_OXI:    0.
+
+
+#############################
+## IMPLICIT EULER SETTINGS ##
+#############################
+
+maxsteps: 2000000
+maxNewt:  5
+ntol:     1.e-06  #1.e-08
+atol:     1.e-06  #1.e-08
+
+hEstim:   1.e-07 #5e-08 #2D O3: 0.0000125 #1.e-06   #1.e-08    # 2.5e-08  #0.0000045
+hmin:     1.e-11 #2D O3: 5e-06 #1.5e-06  #1.e-08     #1.e-10   #1.5e-9
+hmax:     0.1    #4.14e-03  
+
+### increase Cscal, e.g. Cscal >= 1 should yield sufficient decrease
+Cscal:    1. #1.111
+
+
+
+printprec: 14 
+
+filename: CONAIRE_H2_2D_FULL
+
+
+

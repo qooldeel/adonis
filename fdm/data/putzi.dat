@@ -1,0 +1,30 @@
+###
+###  CSTR optimal control example
+###
+
+## time horizon
+t0:     0.
+tend:   0.15
+
+## timestep
+hEstim: 0.05
+
+
+##states at t0
+cA:     1.
+cB:     0.5
+theta:  100.
+thetaK: 100.
+
+##controls at t0
+q1:  21.
+q2:  0
+
+
+##projection method settings
+gamma:     1.e-04
+beta:      0.1
+tol:       1.e-04  #1.e-06
+maxit:     1000
+maxarmijo: 10
+

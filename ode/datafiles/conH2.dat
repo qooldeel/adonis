@@ -1,0 +1,56 @@
+#
+#
+# Parameters for ODE solvers
+#
+# PRINT PRECISION
+printprec: 12
+
+scalesomespecies: 25
+
+# TIME HORIZON
+t0: 0.
+tend:  1.e-04 #1.e-04 #6.e-05 #5.e-04   #3.e-05   #3.e-06        #1.8e-04
+
+# TEMPERATURE   -- when non-isothermal mechs are considered
+T0: 1249.5 #3000 #1500   #1400  #o.k.: 1500, 3000   
+
+# GRAPHICS
+toeps: false
+lw: 3
+
+############################
+###### SOLVER SETTINGS #####
+############################
+
+## 1.) IMPLICIT EULER
+
+maxsteps: 2000000000
+maxNewt:  5
+ntol:     1.e-08
+atol:     1.e-08
+hEstim:   1.e-07  #1.e-06   
+Cscal:    1.11111111111
+hmin:     1.e-07 #1.e-23  
+hmax:     4.14e-03
+  
+fname: CONAIRE_H2_CHEM_SOURCE
+
+# init values -- stoichiometric H2/O2/N2 mixture
+O:    0          
+O2:   0.229277 #0.069033 #0.016723 ##0.017455 ###0.228073    ##0.3553 #0.15 
+H:    0
+OH:   0          
+H2:   0.009241 #0.021743 #0.002107 ##0.004398 ###0.014446   ##0.0224 #0.3  
+HO2:  0
+H2O2: 0 
+H2O:  0 
+N2:   0.748229 #0.000756 # 0. ##0.005732 ###0.744298  ##0.6223  #0.55         
+AR:   0.013252 #0.908468 #0.981171 ##0.972415 ###0.013183  ##0       #NOTE: default chemkin and Gri H2 mechanism don't have it
+
+
+######################################################
+## 2.) RKF45
+Msteps: 500000
+hEst:   1.45e-04
+TOL:    1.e-05
+

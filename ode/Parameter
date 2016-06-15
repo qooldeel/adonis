@@ -1,0 +1,27 @@
+#THIS IS A TEST PARAMETER FILE VERS 0.1 alpha
+# a '#' denotes a comment and the line containing it will be rejected
+#NOTE: -Make sure that a keyword and a value are separated by ':'
+#      -Don't use windows style i.e. don't separate a keyword by whitespace characters  
+	      
+ 
+  c1:  0.245   #lower bracket value	
+
+         Pi:  3.14159265358979323846264338327950288419716939937510 # 50 pos-pi		
+   
+   whatSolver : p#solver under consideration
+
+   c2	:		17.25
+   #tolerance
+   tol: 1.e-3
+
+   # a file name
+   SIM- file :  ~/MARC++ / chemistrybasedmanifold/io/data/SIMDAT_441_E.dat # here I stored the files
+   
+   File2:"mandelbrot.dat  "   # wanna plot some mandelbrot set?  
+
+   # shape parameter can be negative as well 4 it enters quadratically
+   shap  ec:-0.73     # gives also string "shapec"     
+   beta_imq:                                                                     0.983745006715565
+wannaInterpolate    								 : true  
+IsDone: false # 0 works as well 
+   

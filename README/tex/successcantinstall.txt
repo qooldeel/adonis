@@ -1,0 +1,37 @@
+Cantera has been successfully installed.
+
+File locations:
+
+    applications      /usr/local/cantera/bin
+    library files     /usr/local/cantera/lib
+    C++ headers       /usr/local/cantera/include/cantera
+    demos             /usr/local/cantera/demos
+    data files        /usr/local/cantera/data
+
+    
+    Matlab toolbox    /usr/local/cantera/matlab/toolbox/ \
+                       cantera/cantera
+    Matlab demos      /usr/local/cantera/matlab/toolbox/ \
+                       cantera/cantera-demos
+    Matlab tutorials  /usr/local/cantera/matlab/toolbox/ \
+                       cantera/cantera-tutorials
+
+    An m-file to set the correct matlab path for Cantera
+    is at /usr/local/cantera/ctpath.m
+
+    Python package    /usr/lib/python2.5/site-packages/Cantera
+
+    
+    setup script      /home/mfein/setup_cantera
+    
+    The setup script configures the environment for Cantera. It is
+    recommended that you run this script by typing
+
+      source /home/mfein/setup_cantera
+    
+    before using Cantera, or else
+    include its contents in your shell login script.
+    
+chmod +x /usr/local/cantera/bin/ctnew
+chmod +x /usr/local/cantera/bin/mixmaster
+cp -f "/home/mfein/setup_cantera" "/usr/local/cantera/bin"

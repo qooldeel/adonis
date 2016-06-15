@@ -1,0 +1,16 @@
+Found the following Dune-components: 
+
+-----------------------------
+
+dune-common......: yes (/home/mfein/DUNE/dune-common-1.2.1) version 1.2.1
+ALBERTA..........: yes (Version 3.0)
+ALUGrid..........: yes
+AmiraMesh........: no
+Grape............: no
+HDF5.............: no
+MPI..............: yes (MPICH)
+OpenGL...........: yes
+UG...............: no
+
+-----------------------------
+

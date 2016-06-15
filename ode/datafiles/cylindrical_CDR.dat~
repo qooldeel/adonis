@@ -1,0 +1,46 @@
+##
+##
+## Settings for the convection-diffusion-reaction equation system (2 eqs 
+## consisting of species concentration and thermal energy)
+## Reference: Schiesser and Griffiths, "A Compendium of Partial Differential
+## Equation Models -- Methods of Lines Analysis with Matlab", Chapter 13, 
+## Table 13.1, p. 310
+##
+## Note: all units given in cgs throughout
+##
+##
+
+nthstep: 10
+hEstim: 1.e-03
+hMin: 1.e-07
+hMax: 2.5
+
+#Model parameters
+ca0: 0.0
+cae: 0.01
+Tk0: 305.0
+Tke: 305.0
+Tw:  355.0 
+
+
+v:   1.0
+Dc:  0.1
+Dt:  0.1
+k:   0.01
+h:   0.01
+rho: 1.0
+Cp:  0.5
+rk0: 1.5e+09
+dH:  -10000.0
+E:   15000.0
+R:   1.987   
+
+# grind sizes in axial and radial directions, respectively 
+Nx: 20  #nz
+Ny: 7   #nr
+
+# rectangular grid
+a: 0.
+b: 100.0   #zl
+c: 0.
+d: 2.0     #r0

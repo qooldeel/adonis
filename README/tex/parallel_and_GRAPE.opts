@@ -1,0 +1,12 @@
+#DUNE option file for configuration
+#Configuration flags are written to '.opts' file
+CONFIGURE_FLAGS="--prefix=/home/mfein/ARRAKIS \
+  --x-includes=/usr/include/X11R6 \
+  --x-libraries=/usr/lib \
+  --disable-documentation --disable-mpiruntest \
+  --enable-parallel --with-alugrid=/usr/local/alugrid \ 
+  --with-alberta=/usr/local/alberta \
+  --with-grape=$HOME/DUNE/grape CXX=g++ \
+  CC=gcc CXXFLAGS=\"-Wall -O3 -finline-functions \
+   -funroll-loops -DNDEBUG\" CFLAGS=\"-g -Wall\""
+MAKE_FLAGS="all"

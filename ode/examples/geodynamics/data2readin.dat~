@@ -1,0 +1,57 @@
+##
+##  Data for transient heat equation on [a,b] x [c,d]
+##
+##  Everything in SI units
+
+
+
+### SOLVER SETTINGS ######
+##END TIME
+nt:       1000     #implicit  500 #explicit    #number of timesteps 
+
+## impl. Euler/trapezoidal
+maxNewt:  5
+ntol:     1.e-04 #1.e-06
+atol:     1.e-04 #1.e-10
+hEstim:   3.15576e+15 # impl. step 5.6250e+11 #stable timestep for expl. euler  
+Cscal:    1.
+
+hmin:     1.e+14    # keep step high  #expl.: 1e-07
+hmax:     2.5e+16                       #expl.: 1e+12
+
+##END TIME
+tend:     3.15576e+17   #2.8125e+14  # end time expl. euler 
+
+printprec: 14
+
+
+###### Print settings########################################
+######  in any case: set values for the next 3 entries! #####
+savestep: 1
+saveinterval: 1.e-05 #0.00001  	
+
+## Choose nthstep: 0 to use savestep*saveinterval option 
+nthstep: 5  # 10 # expl. Euler
+
+#############################################################
+
+test: 2.4567e+1 43 # the second number. i.e 43 does not count, i.e. we
+                   # get 24.567 and NOT 2.4567e+143
+a: 0.
+b: 150.E3
+c: 0.
+d: 100.E3           ## depth h_r
+
+
+Nx: 101  #101  # impl. #101 #explicit
+Ny: 51 
+
+kappa:   1.e-6
+Tsurf:   273.15            
+Tbot:    1573.15
+Tplume:  1773.15
+Wplume:   25.e3
+
+Qsurf: 9.6E-10
+rho:   2700
+cp:    2.6E-11

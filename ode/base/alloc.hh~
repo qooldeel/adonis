@@ -1,0 +1,20 @@
+#ifndef SIMPLE_ALLOCATION_HH
+#define SIMPLE_ALLOCATION_HH
+
+namespace Adonis{
+
+  template<class T> 
+  class MyAllocator{
+  public:
+    typedef T* PointerType;
+
+    MyAllocator(PointerType p
+
+  private:
+    PointerType pStartStorage_,
+      pEndStorage_
+  };
+
+}//namespace 
+
+#endif

@@ -1,0 +1,160 @@
+############################################################################
+############   SETTING FOR 1D and 2D FINITE DIFFERENCE METHOD   ############
+############################################################################
+##NOTE: Do NOT change names of variables (strings preceding the colon)
+##
+##  only use SI units 
+##
+############################################################################
+
+
+nthstep: 10   #10  # print every 'nthestep' step
+
+# Domain: Rectangle: [a,b] x [c,d]
+# When 1D is considered, only [a,b] becomes meaningful
+a: 0.
+b: 0.001 ###0.00001 ###0.0001 ##0.0001 #0.001  #0.002  ##0.001#sing. mtx   #0.00001  #Anderson 
+c: 0.
+d: 0.0001 ###0.000006552 ###0.00001  ##0.00001 #0.0001 #0.0004 ##0.0001#sing. mtx  #0.000001 
+
+# Number of grid points in x-direction, number of grid points in y-direction
+# higher grid numbers may result in a leak 
+Nx: 33 ### 41  ##71 
+Ny: 23   ###39  ##37  ##65
+
+
+## define when a value is approx. zero
+near_zero: 1.e-13
+
+## BOUNDARY RELEVANT DATA
+
+channel_length_frac: 20.
+x_ignition: 0.0002###0.000005 ##0.000005  #0.00005 #0.000125##nice profile with 'S' #0.0001      #assumption L = 0.01, but only up to b is simulated ### hottest wall after L/20
+plateau_width: 2  #3           ##meaning: 4*hx (here I assume equidist. spacing)
+cubic_spline_from_ignition: 5   #6 (peak consisting of 4 x Tmax)
+
+hottest_y: 0.00005
+
+y_burner_spike_factor: 1
+
+T_ignition:   1249.5  #*#1500 #1850  #1350  #1300 #1800
+T_min:        300.         
+T_wall:       300.
+
+Tlow: 280.
+Tup:  3500.
+
+
+burner_length: 0.00025
+
+pconst: 101325     # atmospheric pressure (in Pa, i.e. N/m²)
+FactorpOut: 1      # n times pconst 
+
+#inlet speed
+v1_in: 3.0  #0.75 ##80 ##470 ##0.75  #0.6 #80. # 500. ###singularity after 180
+v2_in: 0.
+
+v1_wall: 0.
+v2_wall: 0.
+
+#maximally allowed values
+v1_max: 5000.  #550 #350   #in absolute value, i.e. v1 unchangend or v1 = sgn(v1)·v1_max 
+v2_max: 4000.  #450 #220   #in absolute value, i.e. v2 unchangend or v2 = sgn(v2)·v2_max 
+
+
+#test if a value is way too large to be physically reasonable
+#might show you a blow up (caused by dissipation, etc.)
+too_large_value: 1e+25 #definitively too large for abs vals of rho,v1,v2,T, Y_k
+
+# use mechanical compression
+mechCompress: true
+
+# use gravitational force
+gravForce: true
+
+#gravitational acceleration vector
+g1: 0.0       #0.0   
+g2: -9.80665     #0. #negative v down (should comply with direction of velocity)
+
+
+#small value that replaces negative values of when > 0 is required
+rho_min: 5e-06
+small_val: +1.e-09
+
+#consider two numbers equal whenever |d1-d2| < approx_equal
+approx_equal: 1.e-09
+
+#############################
+#############################
+##         ODE             ##
+#############################
+#############################
+
+t0:   0.
+tend: 6.e-03  #3.e-05  #1.5e-5  #5.83e-03  
+
+
+
+                         ##IV Mixture, fuel-air-ratio: 1:15.87
+#*#  Phi = 1/2 (equals 17.4% H2 in mixture, 82.6 % air by volume)
+#**# Phi = 0.32 (equals 11.82% H2 in H2/air mixture)
+
+O:     0.
+O2:    0.229277181        #*#0.228073         
+H:     0.
+OH:    0.
+H2:    0.0092410570       #*#0.014446          
+HO2:   0.	  
+H2O2:  0.
+H2O:   0.     
+N2:    0.7482293905       #*#0.744298          
+AR:    0.0132523715       #*#0.013183         
+
+
+#############################
+## IMPLICIT EULER SETTINGS ##
+#############################
+
+maxsteps: 4200000000 
+maxNewt:  2 ##5
+ntol:     1.e-06  #1.e-08   ##TODO
+atol:     1.e-06  #1.e-08   ##TODO
+
+hEstim:  5.e-9 #1.e-10 ##0.5e-09 ###works ### #1.e-08 ##1.e-07 #1.e-08  #5e-08 #2D O3: 0.0000125 #1.e-06   #1.e-08    # 2.5e-08  #0.0000045
+hmin:     5.e-12 #1.e-13 #0.95e-12 #1.25e-12 #2.5e-12 #5.e-12 ##0.5e-09 #1.e-11 #2D O3: 5e-06 #1.5e-06  #1.e-08     #1.e-10   #1.5e-9
+hmax:     1.5e-04    #4.14e-03  
+
+### increase Cscal, e.g. Cscal >= 1 should yield sufficient decrease
+Cscal:    1.111111111 #1
+
+
+
+printprec: 14 
+
+filename: CONAIRE_H2_2D_FULL
+
+
+
+########### PRINT FROM LAST STEP ON ##############
+### this is controlled  only if  'fromLastStepOn' is not zero
+fromLastStepOn:        289  #if zero then don't print from last slide
+t0_last:               2.4340234374999e-08    #i.e. t0 = tlast0           
+t0_last_timestepsize:  5.e-12 
+elapsed_time_so_far:   209422.784 #in seconds here
+lastSlide:             CONAIRE_H2_2D_FULL288.gnu 
+number_lasttimestep:   2880
+
+
+
+#######################
+#### REDUCTION ########
+#######################
+
+newtTol: 1.e-08
+whichSolver: E
+
+maxit: 12
+nmtol: 1.e-09
+Tol: 1.e-09
+
+#filename_RED: REDUCED_CONAIRE_H2_2D
